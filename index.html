@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Valentine</title>
+  <style>
+    body {
+      background: linear-gradient(#ff9a9e, #fad0c4);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial;
+    }
+
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      text-align: center;
+      width: 320px;
+    }
+
+    input {
+      padding: 10px;
+      width: 80%;
+      margin: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 10px;
+      border-radius: 20px;
+      border: none;
+      font-size: 18px;
+    }
+
+    #yesBtn { background: #ff4d6d; color: white; }
+    #noBtn { background: #ddd; position: absolute; }
+
+    .hidden { display: none; }
+
+    #storyText {
+      font-size: 18px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card" id="nameScreen">
+  <h2>Enter your name &#128140;</h2>
+  <input id="nameInput" placeholder="Your name">
+  <button onclick="start()">Continue</button>
+</div>
+
+<div class="card hidden" id="mainScreen">
+  <h1 id="question"></h1>
+  <button id="yesBtn">Yes &#128150;</button>
+  <button id="noBtn">No &#128148;</button>
+  <p id="message"></p>
+</div>
+
+<div class="card hidden" id="storyScreen">
+  <p id="storyText"></p>
+</div>
+
+<!-- Background music -->
+<audio id="bgMusic" src="music.mp3" loop></audio>
+
+<script>
+let name = "";
+let scale = 1;
+let storyIndex = 0;
+
+const texts = [
+  "Soch le acche se &#129402;",
+  "Dil thoda sa toot raha &#128148;",
+  "Itna bhaav mat kha &#128557;",
+  "Universe bhi chahta hai &#128520;",
+  "Last chance hai &#128524;"
+];
+
+const storyLines = [
+  "Hey Simran,",
+  "Jab hum mile the main tumhara mentor tha,",
+  "aur honestly maine kabhi socha nahi tha",
+  "ki time ke saath tum itni important ban jaogi.",
+  "Dheere-dheere feelings develop hui,",
+  "aur maine woh tumhe bata bhi di thi.",
+  "Sach ye hai ki mujhe abhi bhi thode commitment issues hain,",
+  "but main phir bhi apni feelings se bhaagna nahi chahta.",
+  "I want to give us a genuine chance.",
+  "Tumne jo conditions pehle rakhi thi,",
+  "main unhe accept karne ke liye ready hoon.",
+  "Bas itna hai —",
+  "try karna chahta hoon, bina regret ke. &#129293;"
+];
+
+function start() {
+  name = document.getElementById("nameInput").value || "You";
+  document.getElementById("nameScreen").classList.add("hidden");
+  document.getElementById("mainScreen").classList.remove("hidden");
+  document.getElementById("question").innerHTML =
+    name + ", will you be my Valentine? &#128150;";
+}
+
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const message = document.getElementById("message");
+const music = document.getElementById("bgMusic");
+
+function moveNo() {
+  const x = Math.random() * (window.innerWidth - 120);
+  const y = Math.random() * (window.innerHeight - 60);
+  noBtn.style.left = x + "px";
+  noBtn.style.top = y + "px";
+
+  scale += 0.1;
+  yesBtn.style.transform = "scale(" + scale + ")";
+  message.innerHTML = texts[Math.floor(Math.random() * texts.length)];
+}
+
+noBtn.addEventListener("touchstart", moveNo);
+noBtn.addEventListener("mouseover", moveNo);
+
+yesBtn.addEventListener("click", () => {
+  // MUSIC STARTS HERE
+  music.play();
+
+  document.getElementById("mainScreen").classList.add("hidden");
+  document.getElementById("storyScreen").classList.remove("hidden");
+  showStory();
+});
+
+function showStory() {
+  document.getElementById("storyText").innerHTML =
+    storyLines[storyIndex];
+  storyIndex++;
+
+  if (storyIndex < storyLines.length) {
+    setTimeout(showStory, 2200);
+  } else {
+    setTimeout(showFinal, 2500);
+  }
+}
+
+function showFinal() {
+  document.getElementById("storyText").innerHTML =
+    name + ", main tumhe choose kar raha hoon.<br>Bina pressure ke, bas dil se. &#129293;";
+}
+</script>
+
+</body>
+</html>
